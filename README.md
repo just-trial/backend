@@ -1,5 +1,11 @@
 # JustTravel
 
+## Tech Decisions
+
+1. We used an index for cities on tickets, for performance on search.
+2. We preferred a perfect match to handle this right now, as if use text search with ilike %% we would degrade performance.
+3. With the above being said: it's our responsibility to handle  
+
 ## External Dependencies
 
 - [Docker Compose](https://docs.docker.com/compose/)
