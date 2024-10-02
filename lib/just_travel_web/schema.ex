@@ -1,6 +1,11 @@
 defmodule JustTravelWeb.Schema do
   use Absinthe.Schema
 
+  import AbsintheErrorPayload.Payload
+  import_types(AbsintheErrorPayload.ValidationMessageTypes)
+
+  payload_object(:payload_id, :id)
+
   alias JustTravel.Carts
   alias JustTravel.Tickets
   alias JustTravel.Tickets.Ticket
@@ -72,6 +77,22 @@ defmodule JustTravelWeb.Schema do
 
         {:ok, %{items: items}}
       end)
+    end
+  end
+
+  mutation do
+    @desc "Adiciona um ticket no carrinho e retorna o id da associação criada."
+    field :add_ticket_to_cart, non_null(:payload_id) do
+      arg(:ticket_id, non_null(:id))
+      arg(:cart_id, non_null(:id))
+
+      resolve(fn %{ticket_id: ticket_id, cart_id: cart_id}, _ ->
+        with {:ok, ticket_cart} <- Carts.add_ticket_to_cart(cart_id, ticket_id) do
+          {:ok, ticket_cart.id}
+        end
+      end)
+
+      middleware(&build_payload/2)
     end
   end
 

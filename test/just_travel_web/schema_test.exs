@@ -179,4 +179,58 @@ defmodule JustTravelWeb.SchemaTest do
              %{"city" => "São Paulo", "name" => "Orchestra", "price" => 10.0}
            ]
   end
+
+  test "mutation: add_ticket_to_cart adds a ticket to the cart and returns its id", %{
+    ticket_1: ticket,
+    cart: cart,
+    conn: conn
+  } do
+    query = """
+    mutation($ticketId: ID!, $cartId: ID!) {
+      addTicketToCart(ticketId: $ticketId, cartId: $cartId) {
+        successful
+        result
+      }
+    }
+    """
+
+    variables = %{
+      "ticketId" => ticket.id,
+      "cartId" => cart.id
+    }
+
+    result = post(conn, "/graphql", %{query: query, variables: variables})
+
+    result = json_response(result, 200)["data"]["addTicketToCart"]
+    assert result["successful"]
+    assert result["result"] |> String.to_integer() |> is_integer()
+  end
+
+  test "mutation: add_ticket_to_cart handling error changeset on API", %{
+    cart: cart,
+    conn: conn
+  } do
+    query = """
+    mutation($ticketId: ID!, $cartId: ID!) {
+      addTicketToCart(ticketId: $ticketId, cartId: $cartId) {
+        successful
+        messages {
+          message
+        }
+      }
+    }
+    """
+
+    variables = %{
+      "ticketId" => -1,
+      "cartId" => cart.id
+    }
+
+    result = post(conn, "/graphql", %{query: query, variables: variables})
+
+    assert json_response(result, 200)["data"]["addTicketToCart"] == %{
+             "messages" => [%{"message" => "Ticket deve existir"}],
+             "successful" => false
+           }
+  end
 end

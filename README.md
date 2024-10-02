@@ -9,6 +9,9 @@
 5. If we need better performance to load recurrent nested data, we can think about implement [Dataloader](https://hexdocs.pm/absinthe/dataloader.html)
 6. We could setup Faker and ExMachina for factory and data variation - but it's not a must so I avoided the additional complexity.
 7. I opted to work all in single schema file, but as API grows, its good to better structure the files, absynthe have features for [import_types and import_fields](https://hexdocs.pm/absinthe/importing-types.html#example) for instance
+8. I opted for doing atomic ticket addition on the cart at first instance: I could handle with Repo.insert_all receiving a list of ticket_ids, but I want to handle this later
+9. There is the option to use absinthe relay to handle answers as well. For now I used a [derivation from Kronky](https://hexdocs.pm/absinthe_error_payload) for getting error messages.
+
 
 ## External Dependencies
 
