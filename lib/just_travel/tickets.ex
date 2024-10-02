@@ -26,11 +26,11 @@ defmodule JustTravel.Tickets do
 
   ## Examples
 
-      iex> list_tickets(%{city: "Florianópolis"})
+      iex> list_tickets("Florianópolis")
       [%Ticket{}, ...]
 
   """
-  def list_tickets(%{city: city}) do
+  def list_tickets_by_city(city) do
     t in Ticket
     |> from(where: t.city == ^city)
     |> Repo.all()

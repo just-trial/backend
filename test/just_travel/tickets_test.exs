@@ -15,13 +15,13 @@ defmodule JustTravel.TicketsTest do
       assert Tickets.list_tickets() == [ticket]
     end
 
-    test "list_tickets/0 returns all tickets by a given city" do
+    test "list_tickets_by_city/0 returns all tickets by a given city" do
       ticket_1 = ticket_fixture(%{city: "Grifinória"})
       ticket_2 = ticket_fixture(%{city: "Grifinória"})
       _ticket_3 = ticket_fixture(%{city: "Sunserina"})
       _ticket_4 = ticket_fixture(%{city: "Corvinal"})
       _ticket_5 = ticket_fixture(%{city: "Lufa-Lufa"})
-      assert Tickets.list_tickets(%{city: "Grifinória"}) == [ticket_1, ticket_2]
+      assert Tickets.list_tickets_by_city("Grifinória") == [ticket_1, ticket_2]
     end
 
     test "get_ticket!/1 returns the ticket with given id" do
