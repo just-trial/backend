@@ -102,11 +102,12 @@ defmodule JustTravelWeb.SchemaTest do
                  "city" => "São Paulo",
                  "name" => "Orchestra",
                  "price" => 10.0
-               }
+               },
+               %{"city" => "São Paulo", "name" => "Tachos Day", "price" => 15.0}
              ],
              "pageNumber" => 1,
              "pageSize" => 10,
-             "totalEntries" => 2,
+             "totalEntries" => 3,
              "totalPages" => 1
            }
   end

@@ -1,4 +1,7 @@
 defmodule JustTravelWeb.Schema do
+  @moduledoc """
+  Absinthe schema
+  """
   use Absinthe.Schema
 
   import AbsintheErrorPayload.Payload

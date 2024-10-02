@@ -1,4 +1,7 @@
 defmodule JustTravel.Tickets.Ticket do
+  @moduledoc """
+  Ticket schema
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

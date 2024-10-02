@@ -1,8 +1,11 @@
 defmodule JustTravel.Carts.TicketCart do
+  @moduledoc """
+  TicketCart schema
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias JustTravel.Cart.Cart
+  alias JustTravel.Carts.Cart
   alias JustTravel.Tickets.Ticket
 
   schema "ticket_carts" do
