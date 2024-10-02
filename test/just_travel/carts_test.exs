@@ -52,6 +52,17 @@ defmodule JustTravel.CartsTest do
 
     @invalid_attrs %{cart_id: -1, ticket_id: -1}
 
+    test "list_cart_items_by_cart_id/1 returns all ticket_carts" do
+      cart = cart_fixture()
+      %{ticket_id: ticket_id_1} = ticket_cart_fixture(%{cart_id: cart.id})
+      %{ticket_id: ticket_id_2} = ticket_cart_fixture(%{cart_id: cart.id})
+      _3 = ticket_cart_fixture()
+      _4 = ticket_cart_fixture()
+
+      assert [%{id: ^ticket_id_1}, %{id: ^ticket_id_2}] =
+               Carts.list_cart_items_by_cart_id(cart.id)
+    end
+
     test "list_ticket_carts/0 returns all ticket_carts" do
       ticket_cart = ticket_cart_fixture()
       assert Carts.list_ticket_carts() == [ticket_cart]

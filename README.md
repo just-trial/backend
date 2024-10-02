@@ -7,7 +7,8 @@
 3. With the above being said: it's our responsibility to handle right input. We can think about searching and matching a well know and reliable api list of cities handled by frontend for example and validated in the backend.
 4. The handling of decimal ticket price to float in API were a problem: for quick win we handled it on resolver (`[Tickets] graphql` commit)
 5. If we need better performance to load recurrent nested data, we can think about implement [Dataloader](https://hexdocs.pm/absinthe/dataloader.html)
- 
+6. We could setup Faker and ExMachina for factory and data variation - but it's not a must so I avoided the additional complexity.
+7. I opted to work all in single schema file, but as API grows, its good to better structure the files, absynthe have features for [import_types and import_fields](https://hexdocs.pm/absinthe/importing-types.html#example) for instance
 
 ## External Dependencies
 

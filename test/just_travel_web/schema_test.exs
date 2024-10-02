@@ -1,6 +1,39 @@
 defmodule JustTravelWeb.SchemaTest do
   use JustTravelWeb.ConnCase, async: true
+  alias JustTravel.Carts
   alias JustTravel.Tickets
+
+  setup %{} do
+    # Setup: insert initial data
+    {:ok, ticket_1} =
+      Tickets.create_ticket(%{
+        name: "Concert",
+        city: "São Paulo",
+        price: 100.00,
+        description: "Awesome concert"
+      })
+
+    {:ok, ticket_2} =
+      Tickets.create_ticket(%{
+        name: "Orchestra",
+        city: "São Paulo",
+        price: 10.00,
+        description: "Good one"
+      })
+
+    {:ok, ticket_3} =
+      Tickets.create_ticket(%{
+        name: "Tachos Day",
+        city: "São Paulo",
+        price: 15.00,
+        description: "Nhamiii"
+      })
+
+    {:ok, cart} = Carts.create_cart()
+
+    {:ok,
+     ticket_1: ticket_1, ticket_2: ticket_2, ticket_3: ticket_3, cart: cart, conn: build_conn()}
+  end
 
   test "query ticket by id" do
     # Setup: inserir alguns tickets no banco de dados
@@ -37,31 +70,6 @@ defmodule JustTravelWeb.SchemaTest do
   end
 
   test "query tickets by city" do
-    # Setup: inserir alguns tickets no banco de dados
-    {:ok, _ticket_1} =
-      Tickets.create_ticket(%{
-        name: "Concert",
-        city: "São Paulo",
-        price: 100.00,
-        description: "Awesome concert"
-      })
-
-    {:ok, _ticket_2} =
-      Tickets.create_ticket(%{
-        name: "Orchestra",
-        city: "São Paulo",
-        price: 10.00,
-        description: "Good one"
-      })
-
-    {:ok, _ticket_3} =
-      Tickets.create_ticket(%{
-        name: "Tachos Day",
-        city: "Florianópolis",
-        price: 15.00,
-        description: "Nhamiii"
-      })
-
     query = """
     {
       ticketsByCity(city: "São Paulo") {
@@ -104,31 +112,6 @@ defmodule JustTravelWeb.SchemaTest do
   end
 
   test "query tickets by city with pagination size" do
-    # Setup: inserir alguns tickets no banco de dados
-    {:ok, _ticket_1} =
-      Tickets.create_ticket(%{
-        name: "Concert",
-        city: "São Paulo",
-        price: 100.00,
-        description: "Awesome concert"
-      })
-
-    {:ok, _ticket_2} =
-      Tickets.create_ticket(%{
-        name: "Orchestra",
-        city: "São Paulo",
-        price: 10.00,
-        description: "Good one"
-      })
-
-    {:ok, _ticket_3} =
-      Tickets.create_ticket(%{
-        name: "Tachos Day",
-        city: "São Paulo",
-        price: 15.00,
-        description: "Nhamiii"
-      })
-
     # Define the query and variables for the request
     query = """
     query($city: String!, $page: Int!, $pageSize: Int!) {
@@ -164,5 +147,36 @@ defmodule JustTravelWeb.SchemaTest do
              "totalEntries" => 3,
              "totalPages" => 2
            }
+  end
+
+  test "list cart items", %{ticket_1: ticket_1, ticket_2: ticket_2, cart: cart, conn: conn} do
+    # Add the ticket to the cart
+    {:ok, _} = Carts.add_ticket_to_cart(cart.id, ticket_1.id)
+    {:ok, _} = Carts.add_ticket_to_cart(cart.id, ticket_2.id)
+
+    # Define the query and variables for the request
+    query = """
+    query($id: ID!) {
+      cart(id: $id) {
+          items {
+
+            name
+            city
+            price
+          }
+      }
+    }
+    """
+
+    variables = %{
+      "id" => cart.id
+    }
+
+    result = post(conn, "/graphql", %{query: query, variables: variables})
+
+    assert json_response(result, 200)["data"]["cart"]["items"] == [
+             %{"city" => "São Paulo", "name" => "Concert", "price" => 100.0},
+             %{"city" => "São Paulo", "name" => "Orchestra", "price" => 10.0}
+           ]
   end
 end

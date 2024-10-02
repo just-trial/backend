@@ -22,6 +22,24 @@ defmodule JustTravel.Carts do
   end
 
   @doc """
+  Returns the list of ticket_carts.
+
+  ## Examples
+
+      iex> list_ticket_carts()
+      [%TicketCart{}, ...]
+
+  """
+  def list_cart_items_by_cart_id(cart_id) do
+    from(tc in TicketCart,
+      join: t in assoc(tc, :ticket),
+      where: tc.cart_id == ^cart_id,
+      select: t
+    )
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single ticket_cart.
 
   Raises `Ecto.NoResultsError` if the Ticket cart does not exist.
@@ -36,6 +54,10 @@ defmodule JustTravel.Carts do
 
   """
   def get_ticket_cart!(id), do: Repo.get!(TicketCart, id)
+
+  def add_ticket_to_cart(cart_id, ticket_id) do
+    create_ticket_cart(%{cart_id: cart_id, ticket_id: ticket_id})
+  end
 
   @doc """
   Creates a ticket_cart.

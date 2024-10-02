@@ -1,6 +1,7 @@
 defmodule JustTravelWeb.Schema do
   use Absinthe.Schema
 
+  alias JustTravel.Carts
   alias JustTravel.Tickets
   alias JustTravel.Tickets.Ticket
 
@@ -10,6 +11,10 @@ defmodule JustTravelWeb.Schema do
     field :city, :string
     field :price, :float
     field :description, :string
+  end
+
+  object :cart do
+    field :items, list_of(:ticket)
   end
 
   union :entry do
@@ -55,6 +60,17 @@ defmodule JustTravelWeb.Schema do
 
       resolve(fn %{id: id}, _ ->
         {:ok, Tickets.get_ticket!(id) |> ticket()}
+      end)
+    end
+
+    @desc "Retornar tickets de um carrinho por ID"
+    field :cart, non_null(:cart) do
+      arg(:id, non_null(:id))
+
+      resolve(fn %{id: id}, _ ->
+        items = Carts.list_cart_items_by_cart_id(id) |> Enum.map(&ticket/1)
+
+        {:ok, %{items: items}}
       end)
     end
   end
