@@ -21,7 +21,14 @@ defmodule JustTravel.TicketsTest do
       _ticket_3 = ticket_fixture(%{city: "Sunserina"})
       _ticket_4 = ticket_fixture(%{city: "Corvinal"})
       _ticket_5 = ticket_fixture(%{city: "Lufa-Lufa"})
-      assert Tickets.list_tickets_by_city("Grifinória") == [ticket_1, ticket_2]
+
+      assert Tickets.list_tickets_by_city("Grifinória") == %Scrivener.Page{
+               page_number: 1,
+               page_size: 10,
+               total_entries: 2,
+               total_pages: 1,
+               entries: [ticket_1, ticket_2]
+             }
     end
 
     test "get_ticket!/1 returns the ticket with given id" do
@@ -30,7 +37,12 @@ defmodule JustTravel.TicketsTest do
     end
 
     test "create_ticket/1 with valid data creates a ticket" do
-      valid_attrs = %{name: "some name", description: "some description", city: "some city", price: "120.5"}
+      valid_attrs = %{
+        name: "some name",
+        description: "some description",
+        city: "some city",
+        price: "120.5"
+      }
 
       assert {:ok, %Ticket{} = ticket} = Tickets.create_ticket(valid_attrs)
       assert ticket.name == "some name"
@@ -45,7 +57,13 @@ defmodule JustTravel.TicketsTest do
 
     test "update_ticket/2 with valid data updates the ticket" do
       ticket = ticket_fixture()
-      update_attrs = %{name: "some updated name", description: "some updated description", city: "some updated city", price: "456.7"}
+
+      update_attrs = %{
+        name: "some updated name",
+        description: "some updated description",
+        city: "some updated city",
+        price: "456.7"
+      }
 
       assert {:ok, %Ticket{} = ticket} = Tickets.update_ticket(ticket, update_attrs)
       assert ticket.name == "some updated name"

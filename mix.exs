@@ -47,7 +47,8 @@ defmodule JustTravel.MixProject do
       {:bandit, "~> 1.2"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:absinthe, "~> 1.6"},
-      {:absinthe_plug, "~> 1.5"}
+      {:absinthe_plug, "~> 1.5"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 

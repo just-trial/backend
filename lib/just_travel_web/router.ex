@@ -2,7 +2,10 @@ defmodule JustTravelWeb.Router do
   use JustTravelWeb, :router
 
   forward "/graphql", Absinthe.Plug, schema: JustTravelWeb.Schema
-  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: JustTravelWeb.Schema, interface: :playground
+
+  forward "/graphiql", Absinthe.Plug.GraphiQL,
+    schema: JustTravelWeb.Schema,
+    interface: :playground
 
   pipeline :api do
     plug :accepts, ["json"]
