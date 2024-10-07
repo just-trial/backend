@@ -39,6 +39,7 @@ defmodule JustTravel.Tickets do
   def list_tickets_by_city(city, page, page_size) do
     (t in Ticket)
     |> from(where: t.city == ^city)
+    |> or_where([t], like(fragment("lower(?)", t.name), ^"%#{String.downcase(city)}%"))
     |> Repo.paginate(page: page, page_size: page_size)
   end
 
