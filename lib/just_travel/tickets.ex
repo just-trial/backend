@@ -30,7 +30,13 @@ defmodule JustTravel.Tickets do
       [%Ticket{}, ...]
 
   """
-  def list_tickets_by_city(city, page \\ 1, page_size \\ 10) do
+  def list_tickets_by_city(city, page \\ 1, page_size \\ 10)
+
+  def list_tickets_by_city("*", page, page_size) do
+    Repo.paginate(Ticket, page: page, page_size: page_size)
+  end
+
+  def list_tickets_by_city(city, page, page_size) do
     (t in Ticket)
     |> from(where: t.city == ^city)
     |> Repo.paginate(page: page, page_size: page_size)

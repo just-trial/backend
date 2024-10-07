@@ -47,7 +47,7 @@ defmodule JustTravelWeb.Schema do
   query do
     @desc "Retornar uma lista de ingressos por cidade"
     field :tickets_by_city, :pagination do
-      arg(:city, non_null(:string))
+      arg(:city, :string, default_value: "*")
       # Add page argument
       arg(:page, :integer, default_value: 1)
       # Add page_size argument
