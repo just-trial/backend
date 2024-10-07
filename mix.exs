@@ -49,7 +49,8 @@ defmodule JustTravel.MixProject do
       {:absinthe, "~> 1.6"},
       {:absinthe_plug, "~> 1.5"},
       {:scrivener_ecto, "~> 2.0"},
-      {:absinthe_error_payload, "~> 1.0"}
+      {:absinthe_error_payload, "~> 1.0"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 
